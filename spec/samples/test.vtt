@@ -1,0 +1,26 @@
+﻿WEBVTT
+
+NOTE
+This is a sample file and is provided with no
+warranty whatsover.
+- It may randomly delete itself
+- It could even overwrite itself
+don't trust it.
+
+00:00:04.080 --> 00:06.320 align:start position:20% line:50%,end
+Pick a card, any card!
+
+STYLE
+::cue(#\31) { color: lime; }
+::cue(#crédit\ de\ transcription) { color: red; }
+
+00:06.400 --> 00:07.880 align:middle position:10% line:-1
+Well any card except that one.
+
+NOTE Comments
+
+00:00:08.300 --> 00:00:09.400 align:middle line:90%,end
+You ruined it.
+Thanks a lot.
+
+

@@ -1,0 +1,10 @@
+﻿
+1
+00:00:01,600 --> 00:00:02,684
+Why does SRT use commas in timecodes
+1234
+
+2
+00:00:02,767 --> 00:00:06,021
+But like really though?
+
