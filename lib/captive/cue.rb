@@ -78,6 +78,8 @@ module Captive
     private
 
     def set_time(field, time)
+      return if time.nil?
+
       if time.is_a?(Integer)
         instance_variable_set("@#{field}", time)
       elsif TIMECODE_REGEX.match(time)
