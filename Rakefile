@@ -14,7 +14,7 @@ task :build do
 end
 
 task release: :build do
-  system "gem push captive-#{Captive::VERSION}"
+  system "gem push captive-#{Captive::VERSION}.gem"
 end
 
 task default: :spec
