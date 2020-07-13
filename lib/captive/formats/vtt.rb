@@ -67,13 +67,14 @@ module Captive
     # Dump contents to String
     def to_s
       string = VTT_HEADER.dup
+      string << "\n\n"
       @cue_list.each do |cue|
-        string << "\n\n"
         string << milliseconds_to_timecode(cue.start_time)
         string << ' --> '
         string << milliseconds_to_timecode(cue.end_time)
         string << "\n"
         string << cue.text
+        string << "\n\n"
       end
       string
     end
