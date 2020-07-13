@@ -44,5 +44,48 @@ module Captive
         results
       end
     end
+
+    def method_missing(method_name, *_args)
+      super unless (match = /^as_([a-z]+)$/.match(method_name))
+
+      if valid_format?(match.captures.first.upcase)
+        define_format_conversion(method_name, match.captures.first.upcase)
+        send(method_name)
+      elsif valid_format?(match.captures.first.capitalize)
+        define_format_conversion(method_name, match.captures.first.capitalize)
+        send(method_name)
+      else
+        super
+      end
+    end
+
+    def respond_to_missing?(method_name, _)
+      super unless (match = /^as_([a-z]+)$/.match(method_name))
+
+      return true if valid_format?(match.captures.first.upcase) || valid_format?(match.captures.first.capitalize)
+
+      super
+    end
+
+    private
+
+    def base_klass
+      base = self.class.to_s.split('::')
+      Kernel.const_get(base.first)
+    end
+
+    def valid_format?(format)
+      base_klass.const_defined?(format) && base_klass.const_get(format).include?(Base)
+    end
+
+    def define_format_conversion(method_name, format)
+      self.class.define_method(method_name) do
+        if self.class.to_s.split('::').last == format
+          self
+        else
+          base_klass.const_get(format).new(cue_list: cue_list)
+        end
+      end
+    end
   end
 end
