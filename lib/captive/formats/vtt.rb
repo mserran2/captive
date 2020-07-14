@@ -73,7 +73,7 @@ module Captive
     def to_s
       string = VTT_HEADER.dup
       string << "\n\n"
-      @cue_list.each do |cue|
+      cues.each do |cue|
         string << milliseconds_to_timecode(cue.start_time)
         string << ' --> '
         string << milliseconds_to_timecode(cue.end_time)

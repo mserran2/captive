@@ -51,7 +51,7 @@ module Captive
 
     def to_s
       string = String.new
-      @cue_list.each do |cue|
+      cues.each do |cue|
         string << cue.number.to_s
         string << "\n"
         string << milliseconds_to_timecode(cue.start_time).gsub!('.', ',')
