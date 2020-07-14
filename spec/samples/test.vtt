@@ -14,11 +14,13 @@ STYLE
 ::cue(#\31) { color: lime; }
 ::cue(#crédit\ de\ transcription) { color: red; }
 
+crédit de transcription
 00:06.400 --> 00:07.880 align:middle position:10% line:-1
 Well any card except that one.
 
 NOTE Comments
 
+cue identifier
 00:00:08.300 --> 00:00:09.400 align:middle line:90%,end
 You ruined it.
 Thanks a lot.
