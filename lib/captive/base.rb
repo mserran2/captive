@@ -21,10 +21,10 @@ module Captive
       base.include(Util)
     end
 
-    attr_accessor(:cue_list)
+    attr_accessor(:cues)
 
     def initialize(cue_list: nil)
-      @cue_list = cue_list || []
+      @cues = cue_list || []
     end
 
     def save_as(filename:)
@@ -36,7 +36,7 @@ module Captive
     def as_json(**args)
       results = {
         'version' => VERSION,
-        'cues' => @cue_list.map(&:as_json),
+        'cues' => cues.map(&:as_json),
       }
       if results.respond_to?(:as_json)
         results.as_json(**args)
@@ -83,7 +83,7 @@ module Captive
         if self.class.to_s.split('::').last == format
           self
         else
-          base_klass.const_get(format).new(cue_list: cue_list)
+          base_klass.const_get(format).new(cue_list: cues)
         end
       end
     end
