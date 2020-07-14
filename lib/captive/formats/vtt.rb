@@ -31,8 +31,13 @@ module Captive
             next
           end
 
-          # If its not metadata, and its not an empty line, it should be a timestamp
-          raise InvalidSubtitle, "Invalid Time Format at line #{index}" unless time?(line)
+          # If its not metadata, and its not an empty line, it should be a timestamp or an identifier
+          unless time?(line)
+            # If this line is an identifier the next line should be a timecode
+            next if time?(lines[index + 1])
+
+            raise InvalidSubtitle, "Invalid Time Format at line #{index + 1}" unless time?(line)
+          end
 
           elements = line.split
           start_time = elements[0]
