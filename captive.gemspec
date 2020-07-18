@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.files         = Dir.glob('{bin,lib}/**/*') + %w[LICENSE.txt README.md]
   spec.require_paths = %w[lib]
 
+  spec.required_ruby_version = '>= 1.9.2'
   spec.add_development_dependency 'bundler', '~> 2'
   spec.add_development_dependency 'rake', '~> 12.3', '>= 12.3.3'
   spec.add_development_dependency 'rspec', '~> 3.9'

@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - .git/**/*
     - captive.gemspec
+  TargetRubyVersion: 2.4
 
 # -------------------- LAYOUT COPS --------------------
 Layout/ArgumentAlignment:

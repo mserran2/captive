@@ -10,6 +10,7 @@ RSpec::Core::RakeTask.new(:spec) do |t|
 end
 
 task :build do
+  system 'rm captive-*.gem'
   system 'gem build captive.gemspec'
 end
 
