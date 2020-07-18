@@ -31,6 +31,22 @@ module Captive
         ]
         expect(subject.cues.map(&:text)).to eq correct_values
       end
+
+    context 'when parsing from a blob' do
+      let(:sample) do
+        f = File.open(sample_file, 'r:bom|utf-8')
+        blob = f.read
+        f.close
+        blob
+      end
+      context 'and the blob has a BOM' do
+        let(:blob) { "\xEF\xBB\xBF#{sample}" }
+        subject { VTT.from_blob(blob: blob) }
+
+        it 'should detect the header and not raise an error' do
+          expect { subject }.not_to raise_error
+        end
+      end
     end
   end
 end

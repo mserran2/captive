@@ -86,7 +86,8 @@ module Captive
 
     # VTT Header tag matcher
     def self.validate_header(line)
-      !!line.strip.match(/^#{VTT_HEADER}/)
+      # Make sure BOM does not interfere with header detection
+      !!line.force_encoding('UTF-8').delete("\xEF\xBB\xBF").strip.match(/^#{VTT_HEADER}/)
     end
 
     # VTT Metadata tag matcher
