@@ -32,6 +32,20 @@ module Captive
         expect(subject.cues.map(&:text)).to eq correct_values
       end
 
+      it 'outputs its format correctly as a string' do
+        file = File.open('spec/samples/parsed.vtt')
+        expect(subject.to_s).to eql(file.read)
+        file.close
+      end
+
+      it 'outputs and parses its format correctly as JSON' do
+        vtt = VTT.from_json(json: subject.as_json)
+        file = File.open('spec/samples/parsed.vtt')
+        expect(vtt.to_s).to eql(file.read)
+        file.close
+      end
+    end
+
     context 'when parsing from a blob' do
       let(:sample) do
         f = File.open(sample_file, 'r:bom|utf-8')

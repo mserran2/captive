@@ -16,4 +16,7 @@ module Captive
   # Error denoting incorrect input to a method.
   class InvalidInput < CaptiveError
   end
+
+  class InvalidJsonInput < CaptiveError
+  end
 end

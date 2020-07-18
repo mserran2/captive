@@ -14,6 +14,14 @@ module Captive
       def from_blob(blob:)
         new(cue_list: parse(blob: blob))
       end
+
+      def from_json(json:)
+        json = JSON.parse(json) if json.is_a?(String)
+        raise InvalidJsonInput unless json.key?('cues') && json['cues'].is_a?(Array)
+
+        cues = json['cues'].map { |cue_json| Cue.from_json(json: cue_json) }
+        new(cue_list: cues)
+      end
     end
 
     def self.included(base)

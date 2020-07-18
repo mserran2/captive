@@ -30,6 +30,19 @@ module Captive
         ]
         expect(subject.cues.map(&:text)).to eq correct_values
       end
+
+      it 'outputs its format correctly as a string' do
+        file = File.open(sample_file)
+        expect(subject.to_s).to eql(file.read)
+        file.close
+      end
+
+      it 'outputs and parses its format correctly as JSON' do
+        srt = SRT.from_json(json: subject.as_json)
+        file = File.open(sample_file)
+        expect(srt.to_s).to eql(file.read)
+        file.close
+      end
     end
   end
 end

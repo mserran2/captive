@@ -24,6 +24,25 @@ module Captive
       self.properties = properties || {}
     end
 
+    def self.from_json(json:)
+      schema = {
+        text!: :text,
+        start_time!: :start_time,
+        end_time!: :end_time,
+        number!: :cue_number,
+        properties: :properties,
+      }
+      data = {}
+      schema.each do |mask, value|
+        key = mask[-1] == '!' ? mask.to_s[0...-1] : mask.to_s
+        raise InvalidJsonInput, "Cue missing field: #{key}" if key.to_s != mask.to_s && !json.key?(key)
+
+        data[value] = json[key]
+      end
+
+      new(**data)
+    end
+
     def start_time=(time)
       set_time(:start_time, time)
     end
