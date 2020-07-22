@@ -19,13 +19,12 @@ module Captive
 
           raise InvalidSubtitle, "Invalid Cue Number at line #{count}" if /^\d+$/.match(line).nil?
 
-          cue = Cue.new(cue_number: line.to_i)
           state = :time
         when :time
           raise InvalidSubtitle, "Invalid Time Format at line #{count}" unless timecode?(line)
 
           start_time, end_time = line.split('-->').map(&:strip)
-          cue.set_times(
+          cue = Cue.new(
             start_time: format_time(start_time),
             end_time: format_time(end_time)
           )
@@ -51,8 +50,8 @@ module Captive
 
     def to_s
       string = String.new
-      cues.each do |cue|
-        string << cue.number.to_s
+      cues.each_with_index do |cue, index|
+        string << (index + 1).to_s
         string << "\n"
         string << milliseconds_to_timecode(cue.start_time).gsub!('.', ',')
         string << ' --> '

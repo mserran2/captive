@@ -12,34 +12,32 @@ module Captive
     # List of Text Properties
     TEXT_PROPERTIES = [ALIGNMENT, COLOR, POSITION].freeze
 
-    attr_accessor :number, :text, :properties
+    attr_accessor :text, :properties
     attr_reader :start_time, :end_time
 
     # Creates a new Cue class denoting a subtitle.
-    def initialize(text: nil, start_time: nil, end_time: nil, cue_number: nil, properties: {})
+    def initialize(text: nil, start_time: nil, end_time: nil, properties: {})
       self.text = text
       self.start_time = start_time
       self.end_time = end_time
-      self.number = cue_number
       self.properties = properties || {}
     end
 
-    def self.from_json(json:)
-      schema = {
-        text!: :text,
-        start_time!: :start_time,
-        end_time!: :end_time,
-        number!: :cue_number,
-        properties: :properties,
-      }
-      data = {}
-      schema.each do |mask, value|
-        key = mask[-1] == '!' ? mask.to_s[0...-1] : mask.to_s
-        raise InvalidJsonInput, "Cue missing field: #{key}" if key.to_s != mask.to_s && !json.key?(key)
-
-        data[value] = json[key]
+    def self.from_json(json:, mapping: {})
+      schema = {}
+      %i[text! start_time! end_time! properties].each do |field|
+        field_name = field.to_s.delete('!')
+        schema[field] = mapping[field_name] || mapping[field_name.to_sym] || field_name.to_sym
       end
+      data = {}
+      schema.each do |mask, mapper|
+        key = mask[-1] == '!' ? mask.to_s[0...-1].to_sym : mask
+        if key.to_s != mask.to_s && !(json.key?(mapper.to_s) || json.key?(mapper.to_sym))
+          raise InvalidJsonInput, "Cue missing field: #{mapper}"
+        end
 
+        data[key] = json[mapper.to_s] || json[mapper.to_sym]
+      end
       new(**data)
     end
 
@@ -87,11 +85,15 @@ module Captive
     end
 
     def as_json(**args)
-      if respond_to?(:instance_values) && instance_values.respond_to?(:as_json)
-        instance_values.as_json(**args)
-      else
-        instance_variables.each_with_object({}) { |key, hash| hash[key[1..-1]] = instance_variable_get(key) }
-      end
+      options = args.delete(:options) || {}
+      format = options['format'] || {}
+      obj = {
+        'start_time' => format[:time] == :timecode ? milliseconds_to_timecode(start_time) : start_time,
+        'end_time' => format[:time] == :timecode ? milliseconds_to_timecode(end_time) : end_time,
+        'text' => text,
+        'properties' => properties,
+      }
+      obj.respond_to?(:as_json) ? obj.as_json(**args) : obj
     end
 
     private

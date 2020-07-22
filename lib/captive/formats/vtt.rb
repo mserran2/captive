@@ -14,7 +14,6 @@ module Captive
     def self.parse(blob:)
       cue_list = []
       lines = blob.split("\n")
-      cue_count = 1
       state = :new_cue
       cue = nil
       raise InvalidSubtitle, 'Invalid VTT Signature' unless validate_header(lines.shift)
@@ -42,8 +41,7 @@ module Captive
           elements = line.split
           start_time = elements[0]
           end_time = elements[2]
-          cue = Cue.new(cue_number: cue_count, start_time: start_time, end_time: end_time)
-          cue_count += 1
+          cue = Cue.new(start_time: start_time, end_time: end_time)
           state = :text
         when :text
           if line.empty?
